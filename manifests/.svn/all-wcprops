@@ -1,0 +1,11 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/ppunix/!svn/ver/156/trunk/puppet/test/modules/lustre_client/manifests
+END
+init.pp
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/ppunix/!svn/ver/156/trunk/puppet/test/modules/lustre_client/manifests/init.pp
+END

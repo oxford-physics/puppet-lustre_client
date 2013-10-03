@@ -1,0 +1,11 @@
+#One to test
+#a)  720XD with new kerne
+#b) Lustre2.1
+[oxford-local-lustre-client]
+name=Oxford copy of lustre server packages
+baseurl=http://pplxconfig2.physics.ox.ac.uk/mirrors/oxford-local-lustre-client-2_1/el6/client/RPMS/$basearch
+enabled=1
+protect=1
+gpgcheck=0
+priority=3
+

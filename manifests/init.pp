@@ -23,7 +23,7 @@ class lustre_client ( $version="2.1") {
     ensure  => "mounted",
     options => "localflock",
     atboot  => "true",
-    require => File['/lustre/lhcb'],
+    require => [Package['lustre-client-modules'],File['/lustre/lhcb']],
     }
   mount { "/lustre/atlas":
     device  => "pplxlustremds:/atlas",
@@ -31,7 +31,7 @@ class lustre_client ( $version="2.1") {
     ensure  => "mounted",
     options => "localflock",
     atboot  => "true",
-    require => File['/lustre/atlas'],
+    require => [Package['lustre-client-modules'], File['/lustre/atlas']],
     }
 
   file { '/lustre' :

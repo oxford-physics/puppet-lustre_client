@@ -1,16 +1,20 @@
-class lustre_client ( $version="2.1") {
+class lustre_client ( $version=$lustre_client::params::version ) inherits lustre_client::params {
+
+#  $repofile = "puppet:///modules/lustre_client/oxford-local-lustre-2.1-client.repo" 
+  if ($version==test){
+        $repofile = "puppet:///modules/lustre_client/oxford-local-lustre-2.1-client-test.repo"
+  }
   if ($version=="2.1") {
-
-
+          $repofile = "puppet:///modules/lustre_client/oxford-local-lustre-2.1-client.repo"
+  }
     file { '/etc/yum.repos.d/oxford-local-lustre-2.1-client.repo':
     ensure  => present,
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
-    source  => 'puppet:///modules/lustre_client/oxford-local-lustre-2.1-client.repo',
+    source  => "$repofile"
 
     }
-  }
   ensure_packages ( [ "lustre-client", "lustre-client-modules" ] )
 #:  #libcomm_err
 #                ensure =>installed,

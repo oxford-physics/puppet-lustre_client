@@ -57,9 +57,9 @@ mount | grep  /lustre/$fs && umount /lustre/$fs || ( echo failed on $fs && retur
 
 umountlustre() {
 
-fs=atlas
+fs=atlas25
 while ! do_umount $fs ; do sleep 5;done
-fs=lhcb
+fs=lhcb25
 while ! do_umount $fs ; do sleep 5;done
 sortmodules
 sortmodules

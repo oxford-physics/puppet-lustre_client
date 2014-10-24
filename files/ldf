@@ -1,0 +1,2 @@
+#!/bin/bash
+lfs df $@ | grep -v inactive  | grep -v unavail

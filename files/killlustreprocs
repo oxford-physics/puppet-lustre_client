@@ -1,0 +1,13 @@
+#!/bin/bash
+fs=atlas
+if [[ $1 ]] ;then
+  fs=$1
+fi
+for i in `lsof | grep -e \/data\/$fs\$ -e \/data/$fs\/  | awk '{print $2}' | uniq` ; do kill $i; done
+sleep 1
+for i in `lsof | grep -e \/data\/$fs\$ -e \/data/$fs\/  | awk '{print $2}' | uniq` ; do kill -CONT $i; done
+sleep 11
+for i in `lsof | grep -e \/data\/$fs\$ -e \/data/$fs\/  | awk '{print $2}' | uniq` ; do kill -9 $i; done
+sleep 2
+echo remaining:
+lsof | grep \/data\/$fs  | awk '{print $2}' 

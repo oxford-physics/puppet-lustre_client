@@ -17,6 +17,18 @@ class lustre_client::initscripts ()
     hasstatus  => true,
     require => File ["/etc/init.d/lustre-shutdown"]
   }
-        
+  #work around https://projects.puppetlabs.com/issues/10980#note-1
+    file {'/etc/rc6.d/K02lustre-shutdown':
+      ensure => link,
+      target => '/etc/init.d/lustre-shutdown' ,
+      require => File ["/etc/init.d/lustre-shutdown"]
+
+    }        
+    file {'/etc/rc0.d/K02lustre-shutdown':
+      ensure => link,
+      target => '/etc/init.d/lustre-shutdown' ,
+      require => File ["/etc/init.d/lustre-shutdown"]
+
+    }        
 }
 

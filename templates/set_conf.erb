@@ -1,11 +1,13 @@
 #!/bin/bash
 <% @disabledosts.each do |server| -%>
-lctl get_param osc.<%= server %>*.active | grep =1$ && lctl set_param osc.<%= server %>*.active=0
+/usr/sbin/lctl get_param osc.<%= server %>*.active | grep =1$ && lctl set_param osc.<%= server %>*.active=0
+#Not sure how to reverse this one
+/usr/sbin/lctl --device $(lctl dl | grep <%= server %> | awk '{print $1}') deactivate
 <% end %>
 for i in `lctl get_param osc.*.active | grep =0`; do  
  <% @disabledosts.each do |server| -%> 
     echo $i | grep <%= server %>  && continue
 <% end %> 
-   lctl set_param ${i/=0/=1} && echo reactivating ${i/=0//} | mail -S "ost reactivated"  s.brisbane1@physics.ox.ac.uk
+   /usr/sbin/lctl set_param ${i/=0/=1} && echo reactivating ${i/=0//} | mail -S "ost reactivated"  s.brisbane1@physics.ox.ac.uk
 done
 

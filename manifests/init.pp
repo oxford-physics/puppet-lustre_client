@@ -2,7 +2,8 @@ class lustre_client ( $version=$lustre_client::params::version,
                $disabledosts=$lustre_client::params::disabledosts,
                $confscript=$lustre_client::params::confscript,
                $kernelversionel6 = $lustre_client::params::kernelversionel6,
-               $forcekernelversion=$lustre_client::params::forcekernelversion
+               $forcekernelversion=$lustre_client::params::forcekernelversion,
+               $mountopts = $lustre_client::params::mountopts,
   ) inherits lustre_client::params 
 {
 
@@ -47,29 +48,11 @@ class lustre_client ( $version=$lustre_client::params::version,
 
     }
   ensure_packages ( [ "lustre-client", "lustre-client-modules" ] )
-  mount { "/lustre/lhcb":
-    device  => "pplxlustremds:/lhcb",
-    fstype  => "lustre",
-    ensure  => "absent",
-    options => "localflock,_netdev,noauto",
-    atboot  => "false",
-    require => [Package['lustre-client-modules'],File['/lustre/lhcb']],
-    }
- 
-  mount { "/lustre/atlas":
-    device  => "pplxlustremds:/atlas",
-    fstype  => "lustre",
-    ensure  => "absent",
-    #options => "localflock,_netdev",
-    options => "localflock,_netdev,ro,noauto",
-    atboot  => "true",
-    require => [Package['lustre-client-modules'], File['/lustre/atlas']],
-    }
   mount { "/lustre/lhcb25":
     device  => "pplxlustre25mds3.physics.ox.ac.uk:/lhcb25",
     fstype  => "lustre",
     ensure  => "mounted",
-    options => "localflock,_netdev",
+    options => "$mountopts",
     atboot  => "true",
     require => [Package['lustre-client-modules'], File['/lustre/lhcb25']],
     }
@@ -78,34 +61,18 @@ class lustre_client ( $version=$lustre_client::params::version,
     device  => "pplxlustre25mds3.physics.ox.ac.uk:/atlas25",
     fstype  => "lustre",
     ensure  => "mounted",
-    options => "localflock,_netdev,rw",
+    options => "$mountopts",
     atboot  => "true",
     require => [Package['lustre-client-modules'], File['/lustre/atlas25']],
     }
 
   file { '/lustre' :
   ensure  => 'directory',
-  mode    => '0744',
+  mode    => '0700',
   owner   => 'root',
   group   => 'root',
-  }
-  file { '/lustre/lhcb' :
-  ensure  => 'directory',
-  mode    => '0744',
-  replace => "no",
-  owner   => 'root',
-  group   => 'root',
-  require => File['/lustre'],
   }
   file { '/lustre/lhcb25' :
-  ensure  => 'directory',
-  mode    => '0744',
-  replace => "no",
-  owner   => 'root',
-  group   => 'root',
-  require => File['/lustre'],
-  }
-  file { '/lustre/atlas' :
   ensure  => 'directory',
   mode    => '0744',
   replace => "no",
@@ -125,7 +92,8 @@ class lustre_client ( $version=$lustre_client::params::version,
 
   exec { 'configure_active_osts':
         command => "$confscript",
-        refreshonly => true
+        refreshonly => true,
+        subscribe => File["$confscript"]
     }
 
   concat { $confscript:
@@ -139,14 +107,6 @@ class lustre_client ( $version=$lustre_client::params::version,
     target  => $confscript,
     content => template('lustre_client/set_conf.erb')
   }
-  file { '/usr/local/bin/lustre_disable_disabled_osts.sh':
-      ensure => absent,
-  }
-  file { '/usr/local/bin/lustre_disable_inactive_osts.sh':
-      ensure => absent,
-  }
-
-
 
   if str2bool("$forcekernelversion" )
   {
@@ -155,7 +115,7 @@ class lustre_client ( $version=$lustre_client::params::version,
               ensure => $kernelversionel6     
     }
   }
-
+  include lustre_client::initscripts
 }
 
 

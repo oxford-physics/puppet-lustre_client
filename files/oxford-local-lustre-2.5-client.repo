@@ -3,7 +3,7 @@
 #b) Lustre2.1
 [oxford-local-lustre-client]
 name=Oxford copy of lustre server packages
-baseurl=http://mirror.physics.ox.ac.uk/mirrors/oxford-local-lustre-client-2_5/el6/client/RPMS/$basearch
+baseurl=http://mirror.physics.ox.ac.uk/localrepos/oxford-local-lustre-client-2_5/el6/client/RPMS/$basearch
 enabled=1
 protect=1
 gpgcheck=0

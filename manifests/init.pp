@@ -4,6 +4,7 @@ class lustre_client ( $version=$lustre_client::params::version,
                $kernelversionel6 = $lustre_client::params::kernelversionel6,
                $forcekernelversion=$lustre_client::params::forcekernelversion,
                $mountopts = $lustre_client::params::mountopts,
+               $atlas_mountopts = $lustre_client::params::mountopts,
   ) inherits lustre_client::params 
 {
 
@@ -61,7 +62,7 @@ class lustre_client ( $version=$lustre_client::params::version,
     device  => "pplxlustre25mds3.physics.ox.ac.uk:/atlas25",
     fstype  => "lustre",
     ensure  => "mounted",
-    options => "$mountopts",
+    options => "$atlas_mountopts",
     atboot  => "true",
     require => [Package['lustre-client-modules'], File['/lustre/atlas25']],
     }
